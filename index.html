@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTEZ - Alas de Sabiduría</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4A6041 0%, #003d2b 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(circle at 25% 25%, #f5f5dc 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #AC6C3E 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+        
+        .landing-page {
+            display: block;
+        }
+        
+        .game-page {
+            display: none;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4A6041;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn {
+            background: #AC6C3E;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .nav-btn:hover {
+            background: #8B5530;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(172, 108, 62, 0.4);
+        }
+        
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            margin: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            color: #003d2b;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.8rem;
+            color: #AC6C3E;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        
+        .hero-image {
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(45deg, #4A6041, #AC6C3E);
+            border-radius: 15px;
+            margin: 2rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .play-btn {
+            background: linear-gradient(45deg, #4A6041, #003d2b);
+            color: white;
+            border: none;
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(74, 96, 65, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .play-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(74, 96, 65, 0.6);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #f5f5dc;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+        }
+        
+        .game-header {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-stats {
+            display: flex;
+            gap: 2rem;
+            font-weight: 600;
+            color: #003d2b;
+        }
+        
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        
+        #gameCanvas {
+            border: 3px solid #4A6041;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+        
+        .restart-btn {
+            background: #4A6041;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .restart-btn:hover {
+            background: #003d2b;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .play-btn {
+                padding: 1rem 2rem;
+                font-size: 1.2rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .logo-text {
+                font-size: 2rem;
+            }
+            
+            #gameCanvas {
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+            }
+            
+            .game-stats {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.9);
+            margin: 2rem;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .instructions h3 {
+            color: #003d2b;
+            margin-bottom: 1rem;
+        }
+        
+        .instructions p {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    
+    <!-- Landing Page -->
+    <div class="landing-page" id="landingPage">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-text">UTEZ</div>
+                </div>
+                <button class="nav-btn" onclick="showGame()">Jugar Ahora</button>
+                <button class="nav-btn"><a href="campaña.html">campaña</a></button>
+            </div>
+        </header>
+        
+        <main class="hero">
+            <h1>Alas de Sabiduría</h1>
+            <p class="subtitle">¡Vuela alto, aprende más!</p>
+            
+            <div class="hero-image">
+                🦅
+            </div>
+            
+            <button class="play-btn" onclick="showGame()">
+                Jugar Ahora
+            </button>
+        </main>
+        
+        <section class="instructions">
+            <h3>¿Cómo jugar?</h3>
+            <p>Controla al halcón haciendo clic o presionando la barra espaciadora para volar. Evita los obstáculos y supera los desafíos educativos. ¡Cada vuelo te acerca más al conocimiento!</p>
+        </section>
+        
+        <footer class="footer">
+            <p>Desarrollado como parte de un proyecto estudiantil UTEZ</p>
+        </footer>
+    </div>
+    
+    <!-- Game Page -->
+    <div class="game-page" id="gamePage">
+        <div class="game-container">
+            <div class="game-header">
+                <button class="nav-btn" onclick="showLanding()">← Inicio</button>
+                <div class="game-stats">
+                    <div>Puntuación: <span id="score">0</span></div>
+                    <div>Vidas: <span id="lives">3</span></div>
+                    <div>Energía: <span id="energy">100</span>%</div>
+                </div>
+            </div>
+            
+            <div class="canvas-container">
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+            </div>
+            
+            <div class="game-over" id="gameOver">
+                <h2 style="color: #003d2b; margin-bottom: 1rem;">¡Buen intento!</h2>
+                <p style="color: #666; margin-bottom: 1rem;">Vuelve a intentarlo y vuela más alto</p>
+                <p style="color: #AC6C3E; margin-bottom: 1rem;">Puntuación final: <span id="finalScore">0</span></p>
+                <button class="restart-btn" onclick="restartGame()">Jugar de Nuevo</button>
+                <button class="restart-btn" onclick="showLanding()" style="background: #AC6C3E; margin-left: 1rem;">Inicio</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let canvas, ctx;
+        let gameRunning = false;
+        let animationId;
+        
+        // Game state
+        let score = 0;
+        let lives = 3;
+        let energy = 100;
+        
+        // Hawk object
+        let hawk = {
+            x: 100,
+            y: 300,
+            width: 40,
+            height: 30,
+            velocity: 0,
+            gravity: 0.5,
+            jumpPower: -10,
+            color: '#4A6041'
+        };
+        
+        // Obstacles array
+        let obstacles = [];
+        let obstacleSpeed = 2;
+        let obstacleFrequency = 0.008; // Frecuencia más baja para mayor distancia
+        
+        // Educational phrases for obstacles
+        const educationalPhrases = [
+            "PERSEVERANCIA",
+            "CONOCIMIENTO", 
+            "CREATIVIDAD",
+            "INNOVACIÓN",
+            "EXCELENCIA",
+            "LIDERAZGO",
+            "TEAMWORK",
+            "GROWTH",
+            "WISDOM",
+            "SUCCESS"
+        ];
+        
+        // Initialize game
+        function initGame() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Adjust canvas size for mobile
+            if (window.innerWidth < 768) {
+                canvas.width = Math.min(400, window.innerWidth - 40);
+                canvas.height = 500;
+            }
+            
+            resetGame();
+            gameLoop();
+            
+            // Controls
+            canvas.addEventListener('click', jump);
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    jump();
+                }
+            });
+        }
+        
+        function resetGame() {
+            hawk.x = 100;
+            hawk.y = canvas.height / 2;
+            hawk.velocity = 0;
+            obstacles = [];
+            score = 0;
+            lives = 3;
+            energy = 100;
+            gameRunning = true;
+            document.getElementById('gameOver').style.display = 'none';
+            updateUI();
+        }
+        
+        function jump() {
+            if (gameRunning && energy > 10) {
+                hawk.velocity = hawk.jumpPower;
+                energy -= 5;
+                updateUI();
+            }
+        }
+        
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            update();
+            draw();
+            animationId = requestAnimationFrame(gameLoop);
+        }
+        
+        function update() {
+            // Update hawk physics
+            hawk.velocity += hawk.gravity;
+            hawk.y += hawk.velocity;
+            
+            // Boundary checking
+            if (hawk.y < 0) {
+                hawk.y = 0;
+                hawk.velocity = 0;
+            }
+            if (hawk.y + hawk.height > canvas.height) {
+                hawk.y = canvas.height - hawk.height;
+                hawk.velocity = 0;
+                takeDamage();
+            }
+            
+            // Generate obstacles
+            if (Math.random() < obstacleFrequency) {
+                generateObstacle();
+            }
+            
+            // Update obstacles
+            obstacles.forEach((obstacle, index) => {
+                obstacle.x -= obstacleSpeed;
+                
+                // Remove off-screen obstacles
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.splice(index, 1);
+                    score += 10;
+                    updateUI();
+                }
+                
+                // Collision detection
+                if (checkCollision(hawk, obstacle)) {
+                    takeDamage();
+                }
+            });
+            
+            // Regenerate energy slowly
+            if (energy < 100) {
+                energy += 0.2;
+                if (energy > 100) energy = 100;
+                updateUI();
+            }
+            
+            // Increase difficulty (más gradual)
+            if (score > 0 && score % 150 === 0) {
+                obstacleSpeed += 0.05; // Incremento más suave
+                if (obstacleFrequency < 0.012) { // Límite máximo para mantener jugabilidad
+                    obstacleFrequency += 0.0005; // Incremento muy pequeño
+                }
+            }
+        }
+        
+        function generateObstacle() {
+            const gap = 200; // Espacio más grande para el pájaro
+            const minHeight = 80; // Altura mínima más grande
+            const maxHeight = canvas.height - gap - 80; // Altura máxima más equilibrada
+            
+            // Generar altura más centrada y equilibrada
+            const centerY = canvas.height / 2;
+            const variation = 120; // Variación máxima desde el centro
+            const topHeight = Math.max(minHeight, Math.min(maxHeight, 
+                centerY - gap/2 + (Math.random() - 0.5) * variation));
+            
+            const phrase = educationalPhrases[Math.floor(Math.random() * educationalPhrases.length)];
+            
+            obstacles.push({
+                x: canvas.width,
+                y: 0,
+                width: 80,
+                height: topHeight,
+                color: '#AC6C3E',
+                text: phrase,
+                type: 'top'
+            });
+            
+            obstacles.push({
+                x: canvas.width,
+                y: topHeight + gap,
+                width: 80,
+                height: canvas.height - topHeight - gap,
+                color: '#AC6C3E',
+                text: '',
+                type: 'bottom'
+            });
+        }
+        
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+        
+        function takeDamage() {
+            lives--;
+            energy = Math.max(0, energy - 20);
+            updateUI();
+            
+            if (lives <= 0) {
+                gameOver();
+            }
+        }
+        
+        function gameOver() {
+            gameRunning = false;
+            cancelAnimationFrame(animationId);
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+        
+        function draw() {
+            // Clear canvas with gradient background
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#98FB98');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw clouds
+            drawClouds();
+            
+            // Draw hawk
+            ctx.fillStyle = hawk.color;
+            ctx.fillRect(hawk.x, hawk.y, hawk.width, hawk.height);
+            
+            // Draw hawk details (simple)
+            ctx.fillStyle = '#2F4538';
+            ctx.fillRect(hawk.x + 5, hawk.y + 5, 8, 8); // Eye
+            ctx.fillRect(hawk.x + 25, hawk.y + 10, 15, 5); // Wing
+            
+            // Draw obstacles
+            obstacles.forEach(obstacle => {
+                ctx.fillStyle = obstacle.color;
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                
+                // Draw educational text
+                if (obstacle.text) {
+                    ctx.fillStyle = 'white';
+                    ctx.font = '12px Montserrat';
+                    ctx.textAlign = 'center';
+                    ctx.save();
+                    ctx.translate(obstacle.x + obstacle.width/2, obstacle.y + obstacle.height/2);
+                    ctx.rotate(-Math.PI/2);
+                    ctx.fillText(obstacle.text, 0, 0);
+                    ctx.restore();
+                }
+            });
+            
+            // Draw score on canvas
+            ctx.fillStyle = '#003d2b';
+            ctx.font = 'bold 24px Montserrat';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Puntos: ${score}`, 20, 40);
+        }
+        
+        function drawClouds() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            
+            // Simple cloud shapes
+            for (let i = 0; i < 3; i++) {
+                const x = (i * 300 + Date.now() * 0.01) % (canvas.width + 100) - 50;
+                const y = 50 + i * 80;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.arc(x + 20, y, 25, 0, Math.PI * 2);
+                ctx.arc(x + 40, y, 20, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function updateUI() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = lives;
+            document.getElementById('energy').textContent = Math.round(energy);
+        }
+        
+        function restartGame() {
+            resetGame();
+            gameLoop();
+        }
+        
+        // Navigation functions
+        function showGame() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('gamePage').style.display = 'block';
+            setTimeout(() => {
+                initGame();
+            }, 100);
+        }
+        
+        function showLanding() {
+            document.getElementById('gamePage').style.display = 'none';
+            document.getElementById('landingPage').style.display = 'block';
+            gameRunning = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (canvas && document.getElementById('gamePage').style.display !== 'none') {
+                if (window.innerWidth < 768) {
+                    canvas.width = Math.min(400, window.innerWidth - 40);
+                    canvas.height = 500;
+                } else {
+                    canvas.width = 800;
+                    canvas.height = 600;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
